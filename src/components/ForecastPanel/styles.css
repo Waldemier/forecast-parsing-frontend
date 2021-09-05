@@ -1,0 +1,33 @@
+.site-layout-content {
+    min-height: 600px;
+    position: relative;
+    padding: 24px;
+    margin-top: 20px;
+    background: #fff;
+}
+
+.forecast_content_current {
+    display: flex;
+    justify-content: center;
+    margin-top: 50px;
+}
+
+#components-layout-demo-top .logo {
+    float: left;
+    width: 120px;
+    height: 31px;
+    margin: 16px 24px 16px 0;
+    background: rgba(255, 255, 255, 0.3);
+}
+.ant-row-rtl #components-layout-demo-top .logo {
+    float: right;
+    margin: 16px 0 16px 24px;
+}
+
+.logo {
+    color: white;
+}
+
+.main_content {
+    display: flex;
+}
