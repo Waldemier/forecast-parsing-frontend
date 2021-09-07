@@ -6,6 +6,14 @@
     background: #fff;
 }
 
+.drop_option {
+    margin-top: 15px;
+}
+
+.main_options {
+    max-width: 350px;
+}
+
 .forecast_content_current {
     display: flex;
     justify-content: center;

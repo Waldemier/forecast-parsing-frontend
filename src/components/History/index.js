@@ -1,8 +1,8 @@
 import {useEffect, useRef} from "react";
 
 // External functionality
-import { Collapse  } from 'antd';
-import { CaretRightOutlined } from '@ant-design/icons';
+import { Collapse, Slider, Button  } from 'antd';
+import { CaretRightOutlined, ArrowUpOutlined, ArrowDownOutlined } from '@ant-design/icons';
 
 import './styles.css';
 
@@ -11,16 +11,34 @@ import { timeISOToUAFormat } from '../../helpers/timeHelper';
 
 const { Panel } = Collapse;
 
-const History = ({data}) => {
+
+const History = ({data, onOrderByHandler, orderByIndicator, onFilterHandler, setFilter}) => {
 
     const refScroll = useRef();
 
     useEffect(() => {
-        refScroll.current.scrollTop = refScroll.current.scrollHeight;
+        if(!orderByIndicator) {
+            refScroll.current.scrollTop = refScroll.current.scrollHeight;
+        }
     }, [data]);
+
+
+    const onSliderChangeHandler = (event) => {
+        setFilter({min:event[0], max: event[1]});
+    }
 
     return (
         <div ref={refScroll} className="history_side">
+            <div className="history_options">
+                <div className="slider">
+                    <Slider range min={-100} max={100} defaultValue={[-100, 100]} onChange={onSliderChangeHandler} />
+                    <Button className="button_ok" type="primary" onClick={onFilterHandler}>OK</Button>
+                </div>
+                <div className="ordering_arrows" onClick={onOrderByHandler}>
+                    <ArrowUpOutlined />
+                    <ArrowDownOutlined />
+                </div>
+            </div>
             <Collapse
                 bordered={false}
                 defaultActiveKey={['1']}
@@ -29,7 +47,7 @@ const History = ({data}) => {
             >
                 {
                     data ?
-                        data.map((item, index) =>
+                        data.map(item =>
                             <Panel header={timeISOToUAFormat(item.date)} key={item.id} className="site-collapse-custom-panel">
                                 <p>City: {item.city}</p>
                                 <p>Temperature: {item.temperature}&#176;C</p>
