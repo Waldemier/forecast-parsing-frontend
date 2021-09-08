@@ -5,6 +5,4 @@
 
 
 TODO:
-- logout
 - refresh token logic
-- individual user history

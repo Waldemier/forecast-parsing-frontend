@@ -1,0 +1,33 @@
+.header {
+    width: auto;
+    height: 70px;
+    background: rgb(2,0,36);
+    background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 35%, rgba(45,117,131,1) 100%);
+}
+
+.routes {
+    height: 420px;
+    /*margin-top: 200px;*/
+}
+
+.footer {
+    width: auto;
+    height: 70px;
+    margin-top: 200px;
+    background: rgb(2,0,36);
+    background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 35%, rgba(4,174,208,1) 100%);
+}
+
+.header_logo {
+    color: #f7f7f7;
+    padding: 10px 0 0 30px;
+}
+
+.button_logout {
+    margin: 18px 30px 0 0;
+}
+
+.header_options {
+    display: flex;
+    justify-content: space-between;
+}

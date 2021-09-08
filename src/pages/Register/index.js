@@ -1,7 +1,7 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
-import { Form, Input, Button } from 'antd';
 
+import { Form, Input, Button } from 'antd';
+import {Link} from "react-router-dom";
 import './styles.css';
 
 const layout = {
@@ -13,11 +13,8 @@ const tailLayout = {
     wrapperCol: { offset: 8, span: 16 },
 };
 
-function Login({onAuthHandler}) {
 
-    const onSubmitHandler = data => {
-        onAuthHandler(data);
-    }
+function Register({onRegisterHandler}) {
 
     return (
         <div style={{display: 'flex', justifyContent: 'center', marginTop: '120px'}}>
@@ -26,20 +23,23 @@ function Login({onAuthHandler}) {
                     {...layout}
                     name="basic"
                     initialValues={{ remember: true }}
-                    onFinish={onSubmitHandler}
-                    //onFinishFailed={}
+                    onFinish={onRegisterHandler}
                 >
                     <Form.Item
-                        style={{color: 'white'}}
+                        label="Name"
+                        name="name"
+                        rules={[{ required: true, message: 'Please input your name' }]}
+                    >
+                        <Input />
+                    </Form.Item>
+                    <Form.Item
                         label="Email"
                         name="email"
                         rules={[{ required: true, message: 'Please input your email' }]}
                     >
                         <Input />
                     </Form.Item>
-
                     <Form.Item
-                        style={{color: 'white'}}
                         label="Password"
                         name="password"
                         rules={[{ required: true, message: 'Please input your password' }]}
@@ -47,20 +47,28 @@ function Login({onAuthHandler}) {
                         <Input.Password />
                     </Form.Item>
 
+                    <Form.Item
+                        label="Confirm"
+                        name="confirm"
+                        rules={[{ required: true, message: 'Please input your confirm' }]}
+                    >
+                        <Input.Password />
+                    </Form.Item>
+
                     <Form.Item {...tailLayout}>
-                        <div className="button_login_submit">
+                        <div className="button_register_submit">
                             <Button type="primary" htmlType="submit">
                                 Submit
                             </Button>
                         </div>
-                        <div className="link_to_register">
-                            <Link to="/register">If you don't have any account</Link>
+                        <div className="link_to_login">
+                            <Link to="/login">If you have an account</Link>
                         </div>
                     </Form.Item>
                 </Form>
             </div>
         </div>
-    );
+    )
 }
 
-export default Login;
+export default Register;

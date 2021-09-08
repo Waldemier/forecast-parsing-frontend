@@ -1,3 +1,7 @@
-.button_submit {
+.button_login_submit {
     text-align: center;
+}
+
+.link_to_register {
+    margin-top: 10px;
 }
