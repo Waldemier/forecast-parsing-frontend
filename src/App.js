@@ -17,9 +17,14 @@ import getCookie from './helpers/getCookie'
 import './App.css';
 import Register from "./pages/Register";
 
+// common
+import ROLE from '../src/common/roles';
+
 const App = () => {
 
     const [authorized, setAuthorized] = useState(false);
+    const [role, setRole] = useState(null);
+
     let history = useHistory();
 
     const onAuthHandler = async data => {
@@ -27,8 +32,8 @@ const App = () => {
         {
             const response = await axios.post("https://localhost:5001/api/Auth/login",
                 { email: data.email, password: data.password }, { withCredentials: true });
-
             if(response.data.statusCode !== 500) {
+                localStorage.setItem("user", response.data.user);
                 setAuthorized(true);
             }
         }
@@ -39,10 +44,15 @@ const App = () => {
     }
 
     const onLogoutHandler = async () => {
-        const data = await axios.post("https://localhost:5001/api/Auth/logout", {}, { withCredentials: true });
-        console.log(data)
+        await axios.post("https://localhost:5001/api/Auth/logout", {}, { withCredentials: true });
+        localStorage.removeItem("user");
+        setRole(null);
         setAuthorized(false);
         history.push('/login');
+    }
+
+    const onAdminPanelHandler = () => {
+        history.push('/admin');
     }
 
     const onRegisterHandler = async data => {
@@ -75,6 +85,8 @@ const App = () => {
 
     useEffect(() => {
         if(authorized) {
+            let user = JSON.parse(localStorage.getItem("user"));
+            setRole(user.Role);
             history.push('/weaterforecast');
         }
     }, [authorized]);
@@ -84,16 +96,23 @@ const App = () => {
             <div className="header">
                 <div className="header_options">
                     <h1 className="header_logo">Weather Forecast</h1>
-                    {
-                        authorized ? <Button className="button_logout" type="primary" onClick={onLogoutHandler}>Logout</Button>: null
-                    }
+                    <div className="header_options_buttons">
+                        {
+                            role === ROLE.ADMIN ? <Button className="admin_panel_button" type="primary" onClick={onAdminPanelHandler}>Admin panel</Button>: null
+                        }
+                        {
+                            authorized ? <Button className="button_logout" type="primary" onClick={onLogoutHandler}>Logout</Button>: null
+                        }
+                    </div>
                 </div>
             </div>
             <div className="routes">
                 <Switch>
                     {
                         authorized ?
-                            <Route exact path="/weaterforecast" component={Main} />
+                            <Route exact path="/weaterforecast">
+                                <Main userRole={role}/>
+                            </Route>
                             :
                             (
                                 <>

@@ -1,8 +1,2 @@
-- Forecast
-- Days amount
-- OrderBy option (стрілки)
-- Min / Max date option
-
-
 TODO:
 - refresh token logic

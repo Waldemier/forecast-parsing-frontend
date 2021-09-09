@@ -5,6 +5,14 @@
     background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 35%, rgba(45,117,131,1) 100%);
 }
 
+.admin_panel_button {
+    margin-right: 50px;
+}
+
+.header_options_buttons {
+    margin-right: 20px;
+}
+
 .routes {
     height: 420px;
     /*margin-top: 200px;*/
