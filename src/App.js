@@ -1,6 +1,6 @@
 // hooks
 import {useEffect, useState} from 'react';
-import { Route, Switch, useHistory  } from 'react-router-dom';
+import {Link, Route, Switch, useHistory} from 'react-router-dom';
 
 // External functionality
 import axios from "axios";
@@ -9,6 +9,7 @@ import {Button} from 'antd';
 // components
 import Main from './pages/Main';
 import Login from "./pages/Login";
+import Admin from "./pages/Admin";
 
 // helpers
 import getCookie from './helpers/getCookie'
@@ -76,7 +77,7 @@ const App = () => {
         let token = getCookie("access_token");
         if(token) {
             setAuthorized(true);
-            history.push('/weaterforecast');
+            history.push('/weatherforecast');
         }
         else {
             history.push('/login');
@@ -87,7 +88,7 @@ const App = () => {
         if(authorized) {
             let user = JSON.parse(localStorage.getItem("user"));
             setRole(user.Role);
-            history.push('/weaterforecast');
+            history.push('/weatherforecast');
         }
     }, [authorized]);
 
@@ -95,7 +96,7 @@ const App = () => {
         <div>
             <div className="header">
                 <div className="header_options">
-                    <h1 className="header_logo">Weather Forecast</h1>
+                    <Link to="/weatherforecast"><h1 className="header_logo">Weather Forecast</h1></Link>
                     <div className="header_options_buttons">
                         {
                             role === ROLE.ADMIN ? <Button className="admin_panel_button" type="primary" onClick={onAdminPanelHandler}>Admin panel</Button>: null
@@ -110,9 +111,22 @@ const App = () => {
                 <Switch>
                     {
                         authorized ?
-                            <Route exact path="/weaterforecast">
-                                <Main userRole={role}/>
-                            </Route>
+                            (
+                                <>
+                                    <Route exact path="/weatherforecast">
+                                        <Main userRole={role}/>
+                                    </Route>
+                                    {
+                                        role === ROLE.ADMIN ?
+                                            (
+                                                <Route exact path="/admin">
+                                                    <Admin />
+                                                </Route>
+                                            )
+                                            : null
+                                    }
+                                </>
+                            )
                             :
                             (
                                 <>
