@@ -3,7 +3,6 @@ import {useEffect, useState} from 'react';
 
 // External functionality
 import axios from "axios";
-import { Layout  } from 'antd';
 
 // components
 import ForecastPanel from "../../components/ForecastPanel";
@@ -12,6 +11,7 @@ import History from '../../components/History';
 // css
 import './styles.css';
 import getCookie from "../../helpers/getCookie";
+import axiosTemplate from "../../common/axiosTemplate";
 
 // from ant
 
@@ -29,8 +29,8 @@ const Main = () => {
 
     const onSearch = async city =>
     {
-        const data = await axios.get(`https://localhost:5001/api/WeatherForecast/forecast?city=${city}&days=${days}`,
-            { headers: { "Authorization": `Bearer ${getCookie("access_token")}` } });
+        const data = await axiosTemplate("GET", `WeatherForecast/forecast?city=${city}&days=${days}`, {},
+            { "Authorization": `Bearer ${getCookie("access_token")}` });
 
         if(data.data.statusCode !== 500) {
             setCurrent(data.data.current);

@@ -5,6 +5,7 @@ import {Link, Route, Switch, useHistory} from 'react-router-dom';
 // External functionality
 import axios from "axios";
 import {Button} from 'antd';
+import axiosTemplate from "./common/axiosTemplate";
 
 // components
 import Main from './pages/Main';
@@ -37,8 +38,9 @@ const App = () => {
     const onAuthHandler = async data => {
         try
         {
-            const response = await axios.post("https://localhost:5001/api/Auth/login",
+            const response = await axiosTemplate("POST", "Auth/login",
                 { email: data.email, password: data.password }, { withCredentials: true });
+            console.log(response)
             if(response.data.statusCode !== 500) {
                 localStorage.setItem("user", response.data.user);
                 setAuthorized(true);

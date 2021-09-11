@@ -6,7 +6,7 @@ export default [
         title: 'Id',
         dataIndex: 'id',
         key: 'id',
-        render: text => <p>{text}</p>,
+        render: text => <p>{text}</p>
     },
     {
         title: 'Date',
