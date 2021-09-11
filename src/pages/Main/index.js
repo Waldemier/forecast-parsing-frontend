@@ -29,7 +29,8 @@ const Main = () => {
 
     const onSearch = async city =>
     {
-        const data = await axios.get(`https://localhost:5001/api/WeatherForecast/forecast?city=${city}&days=${days}`, { headers: { "Authorization": `Bearer ${getCookie("access_token")}` } });
+        const data = await axios.get(`https://localhost:5001/api/WeatherForecast/forecast?city=${city}&days=${days}`,
+            { headers: { "Authorization": `Bearer ${getCookie("access_token")}` } });
 
         if(data.data.statusCode !== 500) {
             setCurrent(data.data.current);
@@ -44,25 +45,29 @@ const Main = () => {
     };
 
     const onFilterHandler = async () => {
-        const data = await axios.get(`https://localhost:5001/api/WeatherForecast/history?Min=${filter.min}&Max=${filter.max}`, { headers: { "Authorization": `Bearer ${getCookie("access_token")}` } });
+        const data = await axios.get(`https://localhost:5001/api/WeatherForecast/history?Min=${filter.min}&Max=${filter.max}`,
+            { headers: { "Authorization": `Bearer ${getCookie("access_token")}` } });
         setHistory(data.data);
     }
 
     const onOrderByHandler = async () => {
         setOrderBy(prevValue => prevValue === 'Asc' ? 'Desc' : 'Asc');
         console.log(orderBy)
-        const data = await axios.get(`https://localhost:5001/api/WeatherForecast/history?OrderBy=${orderBy}`, { headers: { "Authorization": `Bearer ${getCookie("access_token")}` } });
+        const data = await axios.get(`https://localhost:5001/api/WeatherForecast/history?OrderBy=${orderBy}`,
+            { headers: { "Authorization": `Bearer ${getCookie("access_token")}` } });
         setHistory(data.data);
         setOrderByIndicator(true);
     }
 
     useEffect(async () => {
-        const data = await axios.get(`https://localhost:5001/api/WeatherForecast/history`, { headers: { "Authorization": `Bearer ${getCookie("access_token")}` } });
+        const data = await axios.get(`https://localhost:5001/api/WeatherForecast/history`,
+            { headers: { "Authorization": `Bearer ${getCookie("access_token")}` } });
         setHistory(data.data);
     }, []);
 
     useEffect(async () => {
-        const data = await axios.get(`https://localhost:5001/api/WeatherForecast/history`, { headers: { "Authorization": `Bearer ${getCookie("access_token")}` } });
+        const data = await axios.get(`https://localhost:5001/api/WeatherForecast/history`,
+            { headers: { "Authorization": `Bearer ${getCookie("access_token")}` } });
         setHistory(data.data);
     }, [location]);
 

@@ -1,14 +1,15 @@
 import React, {useEffect, useState} from 'react';
 import axios from "axios";
 import getCookie from "../../helpers/getCookie";
-import {Table} from "antd";
+import {Button, Table} from "antd";
 
 import './styles.css';
+import {PlusOutlined} from "@ant-design/icons";
 import columns from '../../common/adminUsersTable';
+import {Link} from "react-router-dom";
 
-function Admin({}) {
+function Admin({users, setUsers}) {
 
-    const [users, setUsers] = useState(null);
     const [totalPages, setTotalPages] = useState(1);
     const [reload, setReload] = useState(false);
 
@@ -40,7 +41,12 @@ function Admin({}) {
 
     return (
         <div className="container_admin_table">
-            <Table columns={columns(onDeleteHandler)} dataSource={users} pagination={{ total: totalPages*10, onChange: onChangePagination, showSizeChanger: false }} />
+            <div>
+                <div className="container_admin_table_button">
+                    <Link to="/create"><Button type="primary" style={{marginBottom: 10,  background: '#32CD32', borderColor: '#32CD32'	}}><PlusOutlined />Add a new user</Button></Link>
+                </div>
+                <Table columns={columns(onDeleteHandler)} dataSource={users} pagination={{ total: totalPages*10, onChange: onChangePagination, showSizeChanger: false }} />
+            </div>
         </div>
     );
 }

@@ -20,11 +20,17 @@ import Register from "./pages/Register";
 
 // common
 import ROLE from '../src/common/roles';
+import Update from "./pages/Update";
+import Create from "./pages/Create";
+import SpecificUserHistory from "./pages/SpecificUserHistory";
 
 const App = () => {
 
     const [authorized, setAuthorized] = useState(false);
     const [role, setRole] = useState(null);
+    const [users, setUsers] = useState(null);
+    const [roleForUpdate, setRoleForUpdate] = useState(1);
+    const [roleForCreate, setRoleForCreate] = useState(1);
 
     let history = useHistory();
 
@@ -71,6 +77,28 @@ const App = () => {
             catch (exception) {
                 console.log("Register exception", exception);
             }
+    }
+
+    const onUpdateHandler = async (userId, data) => {
+        const response = await axios.put(`https://localhost:5001/api/admin/update/${userId}`, {
+            name: data.name,
+            email: data.email,
+            role: data.role
+        }, { headers: { "Authorization": `Bearer ${getCookie("access_token")}` } });
+
+        console.log(response);
+        history.push("/admin");
+    }
+
+    const onCreateHandler = async data => {
+        await axios.post('https://localhost:5001/api/admin/create', {
+            name: data.name,
+            email: data.email,
+            role: data.role,
+            password: data.password
+        }, { headers: { "Authorization": `Bearer ${getCookie("access_token")}` } });
+
+        history.push("/admin");
     }
 
     useEffect(() => {
@@ -120,8 +148,25 @@ const App = () => {
                                         role === ROLE.ADMIN ?
                                             (
                                                 <Route exact path="/admin">
-                                                    <Admin />
+                                                    <Admin users={users} setUsers={setUsers} />
                                                 </Route>
+                                            )
+                                            : null
+                                    }
+                                    {
+                                        users ?
+                                            (
+                                                <>
+                                                    <Route exact path="/update/:userId/:name/:email">
+                                                        <Update onUpdateHandler={onUpdateHandler} roleForUpdate={roleForUpdate} setUpdate={setRoleForUpdate} />
+                                                    </Route>
+                                                    <Route exact path="/create">
+                                                        <Create onCreateHandler={onCreateHandler} roleForCreate={roleForCreate} setCreate={setRoleForCreate} />
+                                                    </Route>
+                                                    <Route exact path="/history/:userId">
+                                                        <SpecificUserHistory />
+                                                    </Route>
+                                                </>
                                             )
                                             : null
                                     }

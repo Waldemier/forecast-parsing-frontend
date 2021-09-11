@@ -1,3 +1,10 @@
 .container_admin_table {
-    padding: 20px;
+    padding: 10px;
+}
+
+.container_admin_table_button {
+    display: flex;
+    flex-direction: row-reverse;
+    padding: 12px;
+    margin-right: 27px;
 }
