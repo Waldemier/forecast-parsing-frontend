@@ -11,9 +11,6 @@ import Main from './pages/Main';
 import Login from "./pages/Login";
 import Admin from "./pages/Admin";
 
-// helpers
-import getCookie from './helpers/getCookie'
-
 // css
 import './App.css';
 import Register from "./pages/Register";

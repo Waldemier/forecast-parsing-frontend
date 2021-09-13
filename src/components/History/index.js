@@ -17,10 +17,8 @@ const History = ({data, onOrderByHandler, orderByIndicator, onFilterHandler, set
     const refScroll = useRef();
 
     useEffect(() => {
-        if(!orderByIndicator) {
-            refScroll.current.scrollTop = refScroll.current.scrollHeight;
-        }
-    }, [data]);
+        refScroll.current.scrollTop = refScroll.current.scrollHeight;
+    }, [orderByIndicator]);
 
 
     const onSliderChangeHandler = (event) => {

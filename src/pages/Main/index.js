@@ -1,9 +1,6 @@
 // hooks
 import {useEffect, useState} from 'react';
 
-// External functionality
-import axios from "axios";
-
 // components
 import ForecastPanel from "../../components/ForecastPanel";
 import History from '../../components/History';
@@ -25,7 +22,7 @@ const Main = () => {
     const [days, setDays] = useState(2);
     const [render, setRender] = useState(false);
     const [orderByIndicator, setOrderByIndicator] = useState(false);
-    const [filter, setFilter] = useState({});
+    const [filter, setFilter] = useState({ min: -100, max: 100 });
 
     const onSearch = async city =>
     {
@@ -35,9 +32,8 @@ const Main = () => {
         if(data.data.statusCode !== 500) {
             setCurrent(data.data.current);
             setForecast(data.data.forecast.forecastday);
-            console.log(forecast)
             setLocation(data.data.location);
-            setOrderByIndicator(false);
+            setOrderByIndicator(!orderByIndicator);
             setRender(true);
         }
         else
@@ -45,24 +41,23 @@ const Main = () => {
     };
 
     const onFilterHandler = async () => {
-        const data = await axiosTemplate("GET", `WeatherForecast/history?Min=${filter.min}&Max=${filter.max}`,
+        const data = await axiosTemplate("GET", `WeatherForecast/history?Min=${filter.min}&Max=${filter.max}&OrderBy=${orderBy}`,
             {},  { "Authorization": `Bearer ${localStorage.getItem("access_token")}` });
         setHistory(data.data);
     }
 
     const onOrderByHandler = async () => {
-        setOrderBy(prevValue => prevValue === 'Asc' ? 'Desc' : 'Asc');
-        console.log(orderBy)
-        const data = await axiosTemplate("GET", `WeatherForecast/history?OrderBy=${orderBy}`,
+        const data = await axiosTemplate("GET", `WeatherForecast/history?Min=${filter.min}&Max=${filter.max}&OrderBy=${orderBy}`,
             {}, { "Authorization": `Bearer ${localStorage.getItem("access_token")}` });
         setHistory(data.data);
-        setOrderByIndicator(true);
+        setOrderBy(prevValue => (prevValue === 'Asc') ? 'Desc' : 'Asc');
     }
 
     useEffect(async () => {
         const data = await axiosTemplate("GET", `WeatherForecast/history`,
             {}, { "Authorization": `Bearer ${localStorage.getItem("access_token")}` });
         setHistory(data.data);
+        setOrderBy('Desc');
     }, []);
 
     useEffect(async () => {
