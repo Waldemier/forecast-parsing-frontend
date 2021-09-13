@@ -1,21 +1,21 @@
 import React, {useEffect, useState} from 'react';
 import {useParams} from "react-router-dom";
-import axios from "axios";
 import getCookie from "../../helpers/getCookie";
 import {Table} from "antd";
 import columns from "../../common/adminHistoryTable";
 
 import './styles.css';
+import axiosTemplate from "../../common/axiosTemplate";
 
-const SpecificUserHistory = () => {
+const SpecialUserHistory = () => {
 
     const [history, setHistory] = useState(null);
     const [totalPages, setTotalPages] = useState(1);
     const { userId } = useParams();
 
     const onChangeHistoryPagination = async pageNumber => {
-        const response = await axios.get(`https://localhost:5001/api/Admin/${userId}?PageNumber=${pageNumber}`,
-            { headers: { "Authorization": `Bearer ${getCookie("access_token")}` }});
+        const response = await axiosTemplate("GET", `Admin/${userId}?PageNumber=${pageNumber}`,
+            {}, { "Authorization": `Bearer ${getCookie("access_token")}` });
         console.log(response)
         setHistory(response.data);
         const paginationHistoryHeaderObject = JSON.parse(response.headers["x-history-pagination"]);
@@ -23,8 +23,8 @@ const SpecificUserHistory = () => {
     }
 
     useEffect(async () => {
-        const response = await axios.get(`https://localhost:5001/api/admin/${userId}`,
-            { headers: { "Authorization": `Bearer ${getCookie("access_token")}` } });
+        const response = await axiosTemplate("GET", `admin/${userId}`,
+            {}, { "Authorization": `Bearer ${getCookie("access_token")}` });
         console.log(response.data)
 
         const paginationHistoryHeaderObject = JSON.parse(response.headers["x-history-pagination"]);
@@ -39,4 +39,4 @@ const SpecificUserHistory = () => {
     );
 };
 
-export default SpecificUserHistory;
+export default SpecialUserHistory;

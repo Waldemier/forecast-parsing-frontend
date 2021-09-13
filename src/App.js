@@ -3,7 +3,6 @@ import {useEffect, useState} from 'react';
 import {Link, Route, Switch, useHistory} from 'react-router-dom';
 
 // External functionality
-import axios from "axios";
 import {Button} from 'antd';
 import axiosTemplate from "./common/axiosTemplate";
 
@@ -23,7 +22,7 @@ import Register from "./pages/Register";
 import ROLE from '../src/common/roles';
 import Update from "./pages/Update";
 import Create from "./pages/Create";
-import SpecificUserHistory from "./pages/SpecificUserHistory";
+import SpecialUserHistory from "./pages/SpecialUserHistory";
 
 const App = () => {
 
@@ -40,9 +39,9 @@ const App = () => {
         {
             const response = await axiosTemplate("POST", "Auth/login",
                 { email: data.email, password: data.password }, { withCredentials: true });
-            console.log(response)
             if(response.data.statusCode !== 500) {
                 localStorage.setItem("user", response.data.user);
+                localStorage.setItem("access_token", response.data.access_token)
                 setAuthorized(true);
             }
         }
@@ -53,10 +52,12 @@ const App = () => {
     }
 
     const onLogoutHandler = async () => {
-        await axios.post("https://localhost:5001/api/Auth/logout", {}, { withCredentials: true });
+        await axiosTemplate("POST", "Auth/logout", {}, { withCredentials: true });
         localStorage.removeItem("user");
+        localStorage.removeItem("access_token");
         setRole(null);
         setAuthorized(false);
+
         history.push('/login');
     }
 
@@ -67,7 +68,7 @@ const App = () => {
     const onRegisterHandler = async data => {
             try
             {
-                const response = await axios.post("https://localhost:5001/api/Auth/register", {
+                const response = await axiosTemplate("POST", "Auth/register", {
                     name: data.name,
                     email: data.email,
                     password: data.password,
@@ -82,29 +83,30 @@ const App = () => {
     }
 
     const onUpdateHandler = async (userId, data) => {
-        const response = await axios.put(`https://localhost:5001/api/admin/update/${userId}`, {
+        const response = await axiosTemplate("PUT", `admin/update/${userId}`, {
             name: data.name,
             email: data.email,
             role: data.role
-        }, { headers: { "Authorization": `Bearer ${getCookie("access_token")}` } });
+        },  { "Authorization": `Bearer ${localStorage.getItem("access_token")}` });
 
         console.log(response);
         history.push("/admin");
     }
 
     const onCreateHandler = async data => {
-        await axios.post('https://localhost:5001/api/admin/create', {
+        await axiosTemplate("POST", 'admin/create', {
             name: data.name,
             email: data.email,
             role: data.role,
             password: data.password
-        }, { headers: { "Authorization": `Bearer ${getCookie("access_token")}` } });
+        },  { "Authorization": `Bearer ${localStorage.getItem("access_token")}` });
 
         history.push("/admin");
     }
 
+    // If user will be wanting to refresh the page, this logic will have checked if token exists
     useEffect(() => {
-        let token = getCookie("access_token");
+        let token = localStorage.getItem("access_token");
         if(token) {
             setAuthorized(true);
             history.push('/weatherforecast');
@@ -166,7 +168,7 @@ const App = () => {
                                                         <Create onCreateHandler={onCreateHandler} roleForCreate={roleForCreate} setCreate={setRoleForCreate} />
                                                     </Route>
                                                     <Route exact path="/history/:userId">
-                                                        <SpecificUserHistory />
+                                                        <SpecialUserHistory />
                                                     </Route>
                                                 </>
                                             )

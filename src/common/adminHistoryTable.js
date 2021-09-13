@@ -3,16 +3,16 @@ import { timeISOToUAFormat } from '../helpers/timeHelper';
 
 export default [
     {
-        title: 'Id',
-        dataIndex: 'id',
-        key: 'id',
-        render: text => <p>{text}</p>
-    },
-    {
         title: 'Date',
         dataIndex: 'date',
         key: 'date',
         render: date => <p>{timeISOToUAFormat(date)}</p>
+    },
+    {
+        title: 'City',
+        dataIndex: 'city',
+        key: 'city',
+        render: text => <p>{text}</p>
     },
     {
         title: 'Temperature',

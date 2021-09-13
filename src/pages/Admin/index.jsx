@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import axios from "axios";
 import getCookie from "../../helpers/getCookie";
 import {Button, Table} from "antd";
 
@@ -7,6 +6,7 @@ import './styles.css';
 import {PlusOutlined} from "@ant-design/icons";
 import columns from '../../common/adminUsersTable';
 import {Link} from "react-router-dom";
+import axiosTemplate from "../../common/axiosTemplate";
 
 function Admin({users, setUsers}) {
 
@@ -15,15 +15,15 @@ function Admin({users, setUsers}) {
 
     const onDeleteHandler = async (email, id) => {
         if(window.confirm(`Are you sure you want to delete ${email}?`)) {
-            await axios.delete(`https://localhost:5001/api/Admin/Delete/${id}`,
-                { headers: { "Authorization": `Bearer ${getCookie("access_token")}` }});
+            await axiosTemplate("DELETE", `Admin/Delete/${id}`,
+                {},  { "Authorization": `Bearer ${localStorage.getItem("access_token")}` });
             setReload(prev => !prev);
         }
     }
 
     const onChangePagination = async pageNumber => {
-        const response = await axios.get(`https://localhost:5001/api/Admin?PageNumber=${pageNumber}`,
-            { headers: { "Authorization": `Bearer ${getCookie("access_token")}` }});
+        const response = await axiosTemplate("GET", `Admin?PageNumber=${pageNumber}`,
+            {}, {"Authorization": `Bearer ${localStorage.getItem("access_token")}` });
         console.log(response)
         setUsers(response.data);
         const paginationHeaderObject = JSON.parse(response.headers["x-pagination"]);
@@ -31,8 +31,8 @@ function Admin({users, setUsers}) {
     }
 
     useEffect(async () => {
-        const response = await axios.get("https://localhost:5001/api/Admin",
-            { headers: { "Authorization": `Bearer ${getCookie("access_token")}` }});
+        const response = await axiosTemplate("GET", "Admin",
+            {}, { "Authorization": `Bearer ${localStorage.getItem("access_token")}` });
         setUsers(response.data);
 
         const paginationHeaderObject = JSON.parse(response.headers["x-pagination"]);
