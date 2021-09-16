@@ -2,6 +2,8 @@ import {Button, Space} from "antd";
 import {Link} from "react-router-dom";
 import React from "react";
 
+import ROLES from '../common/roles';
+
 export default (deleteMethod) => [
     {
         title: 'Name',
@@ -18,15 +20,22 @@ export default (deleteMethod) => [
         title: 'Role',
         dataIndex: 'role',
         key: 'role',
-        render: number => <p style={{textAlign: 'center'}}>{number === 0 ? "Admin": "System user"}</p>,
+        render: roleNumber => <p style={{textAlign: 'center'}}>{roleNumber === ROLES.ADMIN ? "Admin":
+                                                                        roleNumber === ROLES.SYSTEM_USER ? "System User":
+                                                                                                                    "Unconfirmed User"}</p>,
     },
     {
         title: 'Action',
         key: 'action',
         render: (text, record) => {
-            return ( record.role !== 0 ? (
+            return ( record.role !== ROLES.ADMIN ? (
                     <Space size="middle">
-                        <Link to={`/history/${record.id}`}><Button type="primary" style={{ background: '#FFFF33', color: "black", borderColor:"#FFFF00" }}>History</Button></Link>
+                        {
+                            record.role !== ROLES.UNCONFIRMED_USER ? (
+                                    <Link to={`/history/${record.id}`}><Button type="primary" style={{ background: '#FFFF33', color: "black", borderColor:"#FFFF00" }}>History</Button></Link>
+                                )
+                            : null
+                        }
                         <Link to={`/update/${record.id}/${record.name}/${record.email}`}><Button type="primary">Update</Button></Link>
                         <Button type="primary" onClick={() => deleteMethod(record.email, record.id)} danger>Delete</Button>
                     </Space>

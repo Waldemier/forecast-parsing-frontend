@@ -10,9 +10,11 @@ import './styles.css';
 import getCookie from "../../helpers/getCookie";
 import axiosTemplate from "../../common/axiosTemplate";
 
-// from ant
+// common
+import ROLES from '../../common/roles';
 
-const Main = () => {
+
+const Main = ({userRole}) => {
 
     const [location, setLocation] = useState(null);
     const [current, setCurrent] = useState(null);
@@ -54,25 +56,35 @@ const Main = () => {
     }
 
     useEffect(async () => {
-        const data = await axiosTemplate("GET", `WeatherForecast/history`,
-            {}, { "Authorization": `Bearer ${localStorage.getItem("access_token")}` });
-        setHistory(data.data);
-        setOrderBy('Desc');
+        if(userRole !== ROLES.UNCONFIRMED_USER) {
+            const data = await axiosTemplate("GET", `WeatherForecast/history`,
+                {}, {"Authorization": `Bearer ${localStorage.getItem("access_token")}`});
+            setHistory(data.data);
+            setOrderBy('Desc');
+        }
     }, []);
 
     useEffect(async () => {
-        const data = await axiosTemplate("GET", `WeatherForecast/history`,
-            {}, {"Authorization": `Bearer ${localStorage.getItem("access_token")}`});
-        setHistory(data.data);
+        if(userRole !== ROLES.UNCONFIRMED_USER) {
+            const data = await axiosTemplate("GET", `WeatherForecast/history`,
+                {}, {"Authorization": `Bearer ${localStorage.getItem("access_token")}`});
+            setHistory(data.data);
+        }
     }, [location]);
 
     return (
         <div className="main_content">
-            <History data={history}
-                     onOrderByHandler={onOrderByHandler}
-                     orderByIndicator={orderByIndicator}
-                     onFilterHandler={onFilterHandler}
-                     setFilter={setFilter}/>
+            {
+                (userRole !== ROLES.UNCONFIRMED_USER) ? (
+                        <History data={history}
+                                 onOrderByHandler={onOrderByHandler}
+                                 orderByIndicator={orderByIndicator}
+                                 onFilterHandler={onFilterHandler}
+                                 setFilter={setFilter}/>
+                    )
+                : null
+            }
+
             <ForecastPanel onSearchHandler={onSearch}
                            render={render}
                            current={current}

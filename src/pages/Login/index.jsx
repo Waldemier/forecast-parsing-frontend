@@ -56,6 +56,9 @@ function Login({onAuthHandler}) {
                         <div className="link_to_register">
                             <Link to="/register">If you don't have any account</Link>
                         </div>
+                        <div className="link_to_register">
+                            <Link to="/forgot">Forgot password?</Link>
+                        </div>
                     </Form.Item>
                 </Form>
             </div>

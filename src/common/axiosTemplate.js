@@ -58,5 +58,6 @@ export default async (method, url = null, data = {}, headers = {}) => {
                     return axios(config);
                 }
             }
+            return err;
         });
 }
